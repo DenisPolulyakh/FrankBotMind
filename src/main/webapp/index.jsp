@@ -1,6 +1,6 @@
 <html>
 <body>
-<h2>Hello Guy!</h2>
-<h3>It is mind for bots</h3>
+<h2>Hi guys!</h2>
+<h3>This is bots mind</h3>
 </body>
 </html>
