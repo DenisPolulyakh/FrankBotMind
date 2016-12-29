@@ -1,9 +1,9 @@
 package ru.dpolulyakh.www.entity;
 
 /**
- * Created by Денис on 26.12.2016.
+ * @author Denis Polulyakh
  */
-public class Valute {
+public class Currency {
     private String numCode;
     private String charCode;
     private String nominal;

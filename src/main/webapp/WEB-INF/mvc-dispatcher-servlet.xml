@@ -22,6 +22,8 @@
         </property>
     </bean>
 
+    <bean id="commandBean" class="ru.dpolulyakh.www.command.Command"/>
+    <bean id="exchangeCurrencyBean" class="ru.dpolulyakh.www.command.ExchangeCurrency"/>
     <!-- for web resources like images, css and js files -->
     <mvc:resources mapping="/resources/**" location="/resources/" />
 

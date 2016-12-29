@@ -1,8 +1,10 @@
 package ru.dpolulyakh.www.command;
 
+import ru.dpolulyakh.www.entity.Message;
+
 /**
- * Created by Денис on 27.12.2016.
+ * @author  Denis
  */
 public interface CommandBot {
-    void execute();
+    Message execute();
 }

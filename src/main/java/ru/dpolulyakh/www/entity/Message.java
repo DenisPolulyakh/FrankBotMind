@@ -3,7 +3,7 @@ package ru.dpolulyakh.www.entity;
 import java.util.ArrayList;
 
 /**
- * Created by Денис on 27.12.2016.
+ * @author Denis Polulyakh
  */
 public class Message {
     private ArrayList<String> phrase = new ArrayList<String>();
