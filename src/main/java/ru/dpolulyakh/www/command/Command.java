@@ -16,7 +16,7 @@ public class Command {
         Map<String, Currency> currencyMap = new HashMap<String,Currency>();
         ArrayList<String> phrase = new ArrayList<String>();
         currencyMap = BotUtilMethods.getMapCurrency(BotUtilMethods.getProperty("cbr.url")+date);
-        phrase.add("Курс ЦБ РФ "+charCode+" на дату "+date);
+        phrase.add("Курс ЦБ РФ "+charCode+" на дату "+date+" ");
         phrase.add(currencyMap.get(charCode).getNominal()+" "+currencyMap.get(charCode).getCharCode()+"="+currencyMap.get(charCode).getValue()+" RUB");
         Message msg = new Message();
         msg.setPhrase(phrase);
