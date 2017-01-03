@@ -32,7 +32,7 @@ public class BotUtilMethods {
      * Method get xml from www.cbr.ru and put valute in Map
      *
      * @param cbrURL link get xml from www.cbr.ru
-     * @return map Currency
+     * @return map ExchangeCurrency
      */
     public static Map<String, Currency> getMapCurrency(String cbrURL) {
         final String METHOD_NAME = "getMapCurrency";
@@ -58,7 +58,7 @@ public class BotUtilMethods {
                 // Если нода не текст
                 if (valute.getNodeType() != Node.TEXT_NODE) {
                     NodeList valuteProps = valute.getChildNodes();
-                    Currency val = new Currency();
+                    Currency cur = new Currency();
                     for (int j = 0; j < valuteProps.getLength(); j++) {
                         Node valuteProp = valuteProps.item(j);
                         // Если нода не текст, то это один из параметров книги - печатаем
@@ -67,25 +67,25 @@ public class BotUtilMethods {
                             String paremeter = valuteProp.getNodeName();
                             switch (paremeter) {
                                 case "NumCode":
-                                    val.setNumCode(valuteProp.getChildNodes().item(0).getTextContent());
+                                    cur.setNumCode(valuteProp.getChildNodes().item(0).getTextContent());
                                     break;
                                 case "CharCode":
-                                    val.setCharCode(valuteProp.getChildNodes().item(0).getTextContent());
+                                    cur.setCharCode(valuteProp.getChildNodes().item(0).getTextContent());
                                     break;
                                 case "Nominal":
-                                    val.setNominal(valuteProp.getChildNodes().item(0).getTextContent());
+                                    cur.setNominal(valuteProp.getChildNodes().item(0).getTextContent());
                                     break;
                                 case "Value":
-                                    val.setValue(valuteProp.getChildNodes().item(0).getTextContent());
+                                    cur.setValue(valuteProp.getChildNodes().item(0).getTextContent());
                                     break;
                                 case "Name":
-                                    val.setName(valuteProp.getChildNodes().item(0).getTextContent());
+                                    cur.setName(valuteProp.getChildNodes().item(0).getTextContent());
                                     break;
                             }
                             log.info(valuteProp.getNodeName() + ":" + valuteProp.getChildNodes().item(0).getTextContent());
                         }
                     }
-                    currencyMap.put(val.getCharCode(), val);
+                    currencyMap.put(cur.getCharCode(), cur);
 
                     log.info("===========>>>>");
                 }

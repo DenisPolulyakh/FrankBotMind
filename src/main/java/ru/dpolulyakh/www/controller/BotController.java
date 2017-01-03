@@ -5,8 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.dpolulyakh.www.command.Command;
-import ru.dpolulyakh.www.command.ExchangeCurrency;
+import ru.dpolulyakh.www.command.exchange.ExchangeCommand;
+import ru.dpolulyakh.www.command.exchange.ExchangeCurrency;
+import ru.dpolulyakh.www.command.exchange.ListCurrency;
+import ru.dpolulyakh.www.command.exchange.ListCurrencyCommand;
 import ru.dpolulyakh.www.entity.Message;
 
 /**
@@ -16,20 +18,31 @@ import ru.dpolulyakh.www.entity.Message;
 @RestController
 public class BotController {
 
-    private Command command;
+    private ExchangeCommand exchangeCommand;
     private ExchangeCurrency exchangeCurrency;
+    private ListCurrency listCurrency;
+    private  ListCurrencyCommand listCurrencyCommand;
+
 
     @Autowired
-    BotController(Command command,ExchangeCurrency exchangeCurrency){
-        this.command=command;
-        this.exchangeCurrency=exchangeCurrency;
+    BotController(ExchangeCommand exchangeCommand, ExchangeCurrency exchangeCurrency, ListCurrency listCurrency, ListCurrencyCommand listCurrencyCommand){
+        this.exchangeCommand=exchangeCommand;
+        this.exchangeCurrency = exchangeCurrency;
+        this.listCurrency = listCurrency;
+        this.listCurrencyCommand = listCurrencyCommand;
     }
 
     @RequestMapping("/exchange")
     public Message exchange(@RequestParam(value = "name", required = false, defaultValue = "USD") String name, @RequestParam(value = "date", required = false, defaultValue = "27.12.2016") String date) {
-        exchangeCurrency.setCommand(command);
+        exchangeCurrency.setCommand(exchangeCommand);
         exchangeCurrency.setCharCode(name);
         exchangeCurrency.setDate(date);
         return  exchangeCurrency.execute();
     }
+    @RequestMapping("/listcurrency")
+    public Message exchange() {
+        listCurrency.setCommand(listCurrencyCommand);
+        return  listCurrency.execute();
+    }
+
 }

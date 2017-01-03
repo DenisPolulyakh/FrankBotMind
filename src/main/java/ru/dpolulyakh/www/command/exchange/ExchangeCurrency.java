@@ -1,5 +1,6 @@
-package ru.dpolulyakh.www.command;
+package ru.dpolulyakh.www.command.exchange;
 
+import ru.dpolulyakh.www.command.CommandBot;
 import ru.dpolulyakh.www.entity.Message;
 
 /**
@@ -7,7 +8,7 @@ import ru.dpolulyakh.www.entity.Message;
  */
 
 public class ExchangeCurrency implements CommandBot {
-    private Command command;
+    private ExchangeCommand command;
     private String charCode;
     private String date;
 
@@ -19,7 +20,7 @@ public class ExchangeCurrency implements CommandBot {
         this.date = date;
     }
 
-    public void setCommand(Command command) {
+    public void setCommand(ExchangeCommand command) {
         this.command = command;
     }
 
