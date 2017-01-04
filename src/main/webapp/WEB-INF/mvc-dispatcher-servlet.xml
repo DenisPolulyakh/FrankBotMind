@@ -33,11 +33,10 @@
     <bean class="java.net.URI" id="dbUrl">
         <constructor-arg value="#{systemEnvironment['DATABASE_URL']}"/>
     </bean>
-
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
-        <property name="url" value="jdbc:postgresql://ec2-50-19-89-124.compute-1.amazonaws.com:5432/dbn3l4dumtu946"/>
-        <property name="username" value="ztzuthxrrlyknw"/>
-        <property name="password" value="1a8084a4426937f516814e199a7f764b6e6ee5f23ebaaf201b15eab7cc35dbe8s"/>
+        <property name="url" value="#{ 'jdbc:postgresql://' + @dbUrl.getHost() + ':' + @dbUrl.getPort() + @dbUrl.getPath() }"/>
+        <property name="username" value="#{ @dbUrl.getUserInfo().split(':')[0] }"/>
+        <property name="password" value="#{ @dbUrl.getUserInfo().split(':')[1] }"/>
     </bean>
 
 
