@@ -9,6 +9,8 @@ import ru.dpolulyakh.www.command.exchange.ExchangeCommand;
 import ru.dpolulyakh.www.command.exchange.ExchangeCurrency;
 import ru.dpolulyakh.www.command.exchange.ListCurrency;
 import ru.dpolulyakh.www.command.exchange.ListCurrencyCommand;
+import ru.dpolulyakh.www.datamodel.Customer;
+import ru.dpolulyakh.www.datamodel.CustomerDAO;
 import ru.dpolulyakh.www.entity.Message;
 
 /**
@@ -22,14 +24,16 @@ public class BotController {
     private ExchangeCurrency exchangeCurrency;
     private ListCurrency listCurrency;
     private  ListCurrencyCommand listCurrencyCommand;
+    private CustomerDAO customerDAO;
 
 
     @Autowired
-    BotController(ExchangeCommand exchangeCommand, ExchangeCurrency exchangeCurrency, ListCurrency listCurrency, ListCurrencyCommand listCurrencyCommand){
+    BotController(ExchangeCommand exchangeCommand, ExchangeCurrency exchangeCurrency, ListCurrency listCurrency, ListCurrencyCommand listCurrencyCommand, CustomerDAO customerDAO){
         this.exchangeCommand=exchangeCommand;
         this.exchangeCurrency = exchangeCurrency;
         this.listCurrency = listCurrency;
         this.listCurrencyCommand = listCurrencyCommand;
+        this.customerDAO=customerDAO;
     }
 
     @RequestMapping("/exchange")
@@ -39,10 +43,13 @@ public class BotController {
         exchangeCurrency.setDate(date);
         return  exchangeCurrency.execute();
     }
-    @RequestMapping("/listcurrency")
-    public Message exchange() {
-        listCurrency.setCommand(listCurrencyCommand);
-        return  listCurrency.execute();
+    @RequestMapping("/botmind")
+    public Message exchange(@RequestParam(value = "message", required = false, defaultValue = "")String message) {
+
+        Customer customer = new Customer(1, "mkyong",28);
+        customerDAO.insert(customer);
+
+        return  null;
     }
 
 }
