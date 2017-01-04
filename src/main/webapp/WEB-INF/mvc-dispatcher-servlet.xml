@@ -26,6 +26,23 @@
     <bean id="exchangeCurrencyBean" class="ru.dpolulyakh.www.command.exchange.ExchangeCurrency"/>
     <bean id="listCurrencyBean" class="ru.dpolulyakh.www.command.exchange.ListCurrency"/>
     <bean id="listCurrencyCommandBean" class="ru.dpolulyakh.www.command.exchange.ListCurrencyCommand"/>
+    <bean id="customerDAO" class="ru.dpolulyakh.www.datamodel.JdbcCustomerDAO">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    <!-- Heroku postgres connection -->
+    <bean class="java.net.URI" id="dbUrl">
+        <constructor-arg value="#{systemEnvironment['DATABASE_URL']}"/>
+    </bean>
+
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="url" value="jdbc:postgresql://ec2-50-19-89-124.compute-1.amazonaws.com:5432/dbn3l4dumtu946"/>
+        <property name="username" value="ztzuthxrrlyknw"/>
+        <property name="password" value="1a8084a4426937f516814e199a7f764b6e6ee5f23ebaaf201b15eab7cc35dbe8s"/>
+    </bean>
+
+
+
+
     <!-- for web resources like images, css and js files -->
     <mvc:resources mapping="/resources/**" location="/resources/" />
 
