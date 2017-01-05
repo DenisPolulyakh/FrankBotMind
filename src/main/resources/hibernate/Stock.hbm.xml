@@ -3,7 +3,7 @@
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-    <class name="ru.dpolulyakh.www.datamodel.Stock" table="stock" catalog="dpolulyakh">
+    <class name="ru.dpolulyakh.www.datamodel.Stock" table="stock" catalog="public">
         <id name="stockId" type="java.lang.Long">
             <column name="STOCK_ID" />
             <generator class="identity" />
