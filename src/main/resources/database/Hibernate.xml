@@ -35,7 +35,7 @@ http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
           class="org.springframework.orm.hibernate4.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory"></property>
     </bean>
-
+<!--
     <tx:advice id="txAdvice" transaction-manager="txManager">
         <tx:attributes>
             <tx:method name="find*" read-only="true" />
@@ -48,5 +48,5 @@ http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
                       expression="execution(* ru.dpolulyakh.www.datamodel.*(..))" />
         <aop:advisor advice-ref="txAdvice" pointcut-ref="userServicePointCut" />
     </aop:config>
-
+-->
 </beans>
