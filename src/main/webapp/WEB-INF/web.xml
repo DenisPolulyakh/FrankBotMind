@@ -47,4 +47,8 @@
             <param-value>AUTO</param-value>
         </init-param>
     </filter>
+    <filter-mapping>
+        <filter-name>OpenSessionInViewFilter</filter-name>
+        <url-pattern>/</url-pattern>
+    </filter-mapping>
 </web-app>
