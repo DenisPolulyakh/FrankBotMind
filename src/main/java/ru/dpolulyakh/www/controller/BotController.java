@@ -2,6 +2,8 @@ package ru.dpolulyakh.www.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,8 +11,9 @@ import ru.dpolulyakh.www.command.exchange.ExchangeCommand;
 import ru.dpolulyakh.www.command.exchange.ExchangeCurrency;
 import ru.dpolulyakh.www.command.exchange.ListCurrency;
 import ru.dpolulyakh.www.command.exchange.ListCurrencyCommand;
-import ru.dpolulyakh.www.datamodel.Customer;
 import ru.dpolulyakh.www.datamodel.CustomerDAO;
+import ru.dpolulyakh.www.datamodel.Stock;
+import ru.dpolulyakh.www.datamodel.StockBo;
 import ru.dpolulyakh.www.entity.Message;
 
 /**
@@ -27,8 +30,10 @@ public class BotController {
     private CustomerDAO customerDAO;
 
 
+
+
     @Autowired
-    BotController(ExchangeCommand exchangeCommand, ExchangeCurrency exchangeCurrency, ListCurrency listCurrency, ListCurrencyCommand listCurrencyCommand, CustomerDAO customerDAO){
+    BotController(ExchangeCommand exchangeCommand, ExchangeCurrency exchangeCurrency, ListCurrency listCurrency, ListCurrencyCommand listCurrencyCommand, Stock stock){
         this.exchangeCommand=exchangeCommand;
         this.exchangeCurrency = exchangeCurrency;
         this.listCurrency = listCurrency;
@@ -46,8 +51,15 @@ public class BotController {
     @RequestMapping("/botmind")
     public Message exchange(@RequestParam(value = "message", required = false, defaultValue = "")String message) {
 
-        Customer customer = new Customer(1, "mkyong",28);
-        customerDAO.insert(customer);
+        ApplicationContext appContext =
+                new ClassPathXmlApplicationContext("spring/config/BeanLocations.xml");
+        StockBo stockBo = (StockBo)appContext.getBean("stockBo");
+
+        /** insert **/
+        Stock stock = new Stock();
+        stock.setStockCode("7668");
+        stock.setStockName("HAIO");
+        stockBo.save(stock);
 
         return  null;
     }
