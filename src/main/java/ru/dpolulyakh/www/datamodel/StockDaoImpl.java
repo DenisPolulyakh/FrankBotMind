@@ -16,7 +16,7 @@ public class StockDaoImpl extends HibernateDaoSupport implements StockDao {
 
     private TransactionTemplate transactionTemplate;
 
-    public void setTransactionManager(PlatformTransactionManager transactionManager) {
+    public void setTransactionTemplate(PlatformTransactionManager transactionManager) {
         this.transactionTemplate = new TransactionTemplate(transactionManager);
     }
 
