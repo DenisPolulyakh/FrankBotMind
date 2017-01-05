@@ -26,15 +26,6 @@
     <bean id="exchangeCurrencyBean" class="ru.dpolulyakh.www.command.exchange.ExchangeCurrency"/>
     <bean id="listCurrencyBean" class="ru.dpolulyakh.www.command.exchange.ListCurrency"/>
     <bean id="listCurrencyCommandBean" class="ru.dpolulyakh.www.command.exchange.ListCurrencyCommand"/>
-    <!--
-    <bean id="customerDAO" class="ru.dpolulyakh.www.datamodel.JdbcCustomerDAO">
-        <property name="dataSource" ref="dataSource" />
-    </bean>
-    -->
-
-
-
-
     <!-- for web resources like images, css and js files -->
     <mvc:resources mapping="/resources/**" location="/resources/" />
 
