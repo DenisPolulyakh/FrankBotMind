@@ -27,9 +27,10 @@
     <bean id="listCurrencyBean" class="ru.dpolulyakh.www.command.exchange.ListCurrency"/>
     <bean id="listCurrencyCommandBean" class="ru.dpolulyakh.www.command.exchange.ListCurrencyCommand"/>
 
+    <import resource=""/>
 
     <!-- for web resources like images, css and js files -->
-    <mvc:resources mapping="/resources/**" location="/resources/" />
+    <mvc:resources mapping="/resources/**" location="resources/" />
 
     <mvc:annotation-driven />
 
