@@ -23,11 +23,11 @@ public class StockDaoImpl extends HibernateDaoSupport implements StockDao {
     @Override
     public void save(Stock stock) {
         // Programmatic transaction management
-        transactionTemplate.execute(new TransactionCallback<Object>() {
+        transactionTemplate.execute(new TransactionCallback<Stock>() {
             @Override
-            public Object doInTransaction(TransactionStatus transactionStatus) {
+            public Stock doInTransaction(TransactionStatus transactionStatus) {
                 getHibernateTemplate().save(stock);
-                return null;
+                return stock;
             }
 
 
