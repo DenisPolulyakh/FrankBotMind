@@ -10,23 +10,22 @@ import java.util.List;
  */
 public class StockDaoImpl extends HibernateDaoSupport implements StockDao{
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly=false)
     public void save(Stock stock){
                 getHibernateTemplate().save(stock);
     }
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly=false)
     public void update(Stock stock){
         getHibernateTemplate().update(stock);
     }
     @Override
-    @Transactional(readOnly = false)
-    public void delete(Stock stock){
+    @Transactional(readOnly=false)
+     public void delete(Stock stock){
         getHibernateTemplate().delete(stock);
     }
     @Override
-    @Transactional(readOnly = false)
-    public Stock findByStockCode(String stockCode){
+     public Stock findByStockCode(String stockCode){
         List list = getHibernateTemplate().find("from Stock where stockCode=?",stockCode);
         return (Stock)list.get(0);
     }
