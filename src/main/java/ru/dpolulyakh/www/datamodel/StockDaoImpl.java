@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class StockDaoImpl extends HibernateDaoSupport implements StockDao{
     @Override
-    @Transactional
+    @Transactional(readOnly = false)
     public void save(Stock stock){
                 getHibernateTemplate().save(stock);
     }
