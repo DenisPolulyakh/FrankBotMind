@@ -33,7 +33,7 @@ public class BotController {
 
 
     @Autowired
-    BotController(ExchangeCommand exchangeCommand, ExchangeCurrency exchangeCurrency, ListCurrency listCurrency, ListCurrencyCommand listCurrencyCommand, Stock stock){
+    BotController(ExchangeCommand exchangeCommand, ExchangeCurrency exchangeCurrency, ListCurrency listCurrency, ListCurrencyCommand listCurrencyCommand){
         this.exchangeCommand=exchangeCommand;
         this.exchangeCurrency = exchangeCurrency;
         this.listCurrency = listCurrency;
