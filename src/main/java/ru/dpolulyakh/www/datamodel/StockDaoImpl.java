@@ -4,7 +4,7 @@ import org.hibernate.FlushMode;
 import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.List;
@@ -23,16 +23,12 @@ public class StockDaoImpl extends HibernateDaoSupport implements StockDao {
     @Override
     public void save(Stock stock) {
         // Programmatic transaction management
-        transactionTemplate.execute(new TransactionCallback<Stock>() {
+        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
             @Override
-            public Stock doInTransaction(TransactionStatus transactionStatus) {
+            protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
                 getHibernateTemplate().save(stock);
-                return stock;
             }
-
-
         });
-
     }
 
     @Override
