@@ -1,7 +1,7 @@
 package ru.dpolulyakh.www.datamodel;
 
+import org.hibernate.FlushMode;
 import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -10,18 +10,19 @@ import java.util.List;
  */
 public class StockDaoImpl extends HibernateDaoSupport implements StockDao{
     @Override
-    @Transactional(readOnly=false)
     public void save(Stock stock){
-                getHibernateTemplate().save(stock);
+        getHibernateTemplate().getSessionFactory().getCurrentSession().setFlushMode(FlushMode.AUTO);
+        getHibernateTemplate().save(stock);
     }
     @Override
-    @Transactional(readOnly=false)
+
     public void update(Stock stock){
+        getHibernateTemplate().getSessionFactory().getCurrentSession().setFlushMode(FlushMode.AUTO);
         getHibernateTemplate().update(stock);
     }
     @Override
-    @Transactional(readOnly=false)
      public void delete(Stock stock){
+        getHibernateTemplate().getSessionFactory().getCurrentSession().setFlushMode(FlushMode.AUTO);
         getHibernateTemplate().delete(stock);
     }
     @Override
