@@ -1,0 +1,27 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+    <!-- Stock business object -->
+    <bean id="stockBo" class="ru.dpolulyakh.www.datamodel.StockBoImpl" >
+        <property name="stockDao" ref="stockDao" />
+    </bean>
+
+    <!-- Stock Data Access Object -->
+    <bean id="stockDao" class="ru.dpolulyakh.www.datamodel.StockDaoImpl" >
+        <property name="sessionFactory" ref="sessionFactory"></property>
+        <property name="transactionTemplate" ref="transactionManager"></property>
+    </bean>
+
+    <!-- PlatformTransactionManager which are going to drive transaction-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+    <!-- Instance of transaction template -->
+    <bean id="transactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
+        <property name="transactionManager" ref="transactionManager"></property>
+    </bean>
+
+</beans>
