@@ -1,6 +1,9 @@
 package ru.dpolulyakh.www.utils;
 
 import org.apache.log4j.Logger;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
@@ -22,7 +25,7 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * Created by Денис on 27.12.2016.
+ * @author  Denis Polulyakh
  */
 public class BotUtilMethods {
     private static final String CLASS_NAME = BotUtilMethods.class.getName();
@@ -47,11 +50,11 @@ public class BotUtilMethods {
             urlconn.connect();
             InputStream in = null;
             in = urlconn.getInputStream();
-
             DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document document = documentBuilder.parse(in);
             // Получаем корневой элемент
             Node root = document.getDocumentElement();
+           // root.getAttributes().get
             NodeList valutes = root.getChildNodes();
             for (int i = 0; i < valutes.getLength(); i++) {
                 Node valute = valutes.item(i);
@@ -115,6 +118,21 @@ public class BotUtilMethods {
         }
         log.info(CLASS_NAME + " " + METHOD_NAME + " exit");
         return props.getProperty(aliasProperty);
+    }
+
+    public static String getPropertyFromJSON(String json, String property) {
+        final String METHOD_NAME = "getPropertyFromJSON";
+        JSONParser parser = new JSONParser();
+        String message = "";
+        try {
+            Object messageObject = parser.parse(json);
+            JSONObject resultJson = (JSONObject) messageObject;
+            message = "" + resultJson.get(property);
+        } catch (ParseException e) {
+            log.error("Erorr parse json " + e.getMessage());
+            e.printStackTrace();
+        }
+        return message;
     }
 
 

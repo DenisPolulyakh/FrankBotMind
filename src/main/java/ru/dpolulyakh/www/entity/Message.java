@@ -1,12 +1,15 @@
 package ru.dpolulyakh.www.entity;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 /**
  * @author Denis Polulyakh
  */
+
 public class Message {
-    private String phrase = new String();
+
+    private ArrayList<String> phraseAL = new ArrayList<String>();
 
     private Set codeCurrency;
     private Set nameCurrency;
@@ -27,11 +30,19 @@ public class Message {
         this.nameCurrency = nameCurrency;
     }
 
-    public String getPhrase() {
-        return phrase;
+    public ArrayList<String> getPhrase() {
+        return phraseAL;
     }
 
-    public void setPhrase(String phrase) {
-        this.phrase = phrase;
+    public void setPhraseAL(ArrayList<String> phraseAL) {
+        this.phraseAL = phraseAL;
+    }
+
+    public void addPhrase(String phrase){
+        phraseAL.add(phrase);
+    }
+
+    public void resetPhrase(){
+        phraseAL.clear();
     }
 }

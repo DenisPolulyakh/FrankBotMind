@@ -1,7 +1,6 @@
 package ru.dpolulyakh.www.command.exchange;
 
 import ru.dpolulyakh.www.command.CommandBot;
-import ru.dpolulyakh.www.entity.Message;
 
 /**
  * @author Denis Polulyakh
@@ -25,7 +24,7 @@ public class ExchangeCurrency implements CommandBot {
     }
 
     @Override
-    public Message execute() {
+    public String execute() {
         return command.getCurrencyMessage(charCode, date);
     }
 }

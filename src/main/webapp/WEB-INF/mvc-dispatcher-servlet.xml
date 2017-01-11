@@ -10,7 +10,7 @@
         http://www.springframework.org/schema/mvc
 		http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-    <context:component-scan base-package="ru.dpolulyakh.www.controller" />
+    <context:component-scan base-package="ru.dpolulyakh.www" />
 
     <bean
             class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -22,28 +22,12 @@
         </property>
     </bean>
 
-    <bean id="commandBean" class="ru.dpolulyakh.www.command.exchange.ExchangeCommand"/>
-    <bean id="exchangeCurrencyBean" class="ru.dpolulyakh.www.command.exchange.ExchangeCurrency"/>
-    <bean id="listCurrencyBean" class="ru.dpolulyakh.www.command.exchange.ListCurrency"/>
-    <bean id="listCurrencyCommandBean" class="ru.dpolulyakh.www.command.exchange.ListCurrencyCommand"/>
-    <bean id="customerDAO" class="ru.dpolulyakh.www.datamodel.JdbcCustomerDAO">
-        <property name="dataSource" ref="dataSource" />
+    <bean id="xmlApplicationContext" class="ru.dpolulyakh.www.context.XmlApplicationContext">
+        <property name="pathXmlConfiguration" value="/spring/Spring-Module.xml" />
     </bean>
-    <!-- Heroku postgres connection -->
-    <bean class="java.net.URI" id="dbUrl">
-        <constructor-arg value="#{systemEnvironment['DATABASE_URL']}"/>
-    </bean>
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
-        <property name="url" value="#{ 'jdbc:postgresql://' + @dbUrl.getHost() + ':' + @dbUrl.getPort() + @dbUrl.getPath() }"/>
-        <property name="username" value="#{ @dbUrl.getUserInfo().split(':')[0] }"/>
-        <property name="password" value="#{ @dbUrl.getUserInfo().split(':')[1] }"/>
-    </bean>
-
-
-
 
     <!-- for web resources like images, css and js files -->
-    <mvc:resources mapping="/resources/**" location="/resources/" />
+    <mvc:resources mapping="/resources/**" location="resources/" />
 
     <mvc:annotation-driven />
 
