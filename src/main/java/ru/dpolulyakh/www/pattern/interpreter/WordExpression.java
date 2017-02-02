@@ -1,11 +1,11 @@
-package ru.dpolulyakh.www.process.interpreter;
+package ru.dpolulyakh.www.pattern.interpreter;
 
 /**
  * @author Denis Polulyakh
  *         10.01.2017
  */
-public class WordCourseExpression implements Expression{
-    private String word = "курс";
+public class WordExpression implements Expression{
+    private String word = "";
     private boolean isExpressionFind = false;
 
     public void setWord(String word) {
@@ -23,8 +23,6 @@ public class WordCourseExpression implements Expression{
 
         if(input.toLowerCase().indexOf(word)!=-1){
            isExpressionFind = true;
-           input = input.replaceAll(word,"");
-           context.setInput(input);
         }
 
 

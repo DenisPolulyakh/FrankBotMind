@@ -1,4 +1,4 @@
-package ru.dpolulyakh.www.process.interpreter;
+package ru.dpolulyakh.www.pattern.interpreter;
 
 import org.apache.log4j.Logger;
 import ru.dpolulyakh.www.dao.cource.CodeNameCurrency;

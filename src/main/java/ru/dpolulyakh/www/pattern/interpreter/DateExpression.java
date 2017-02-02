@@ -1,4 +1,4 @@
-package ru.dpolulyakh.www.process.interpreter;
+package ru.dpolulyakh.www.pattern.interpreter;
 
 import org.apache.log4j.Logger;
 
@@ -63,6 +63,7 @@ public class DateExpression implements Expression {
             log.info("Incorrect Date: " + dateString);
             isIncorrectedDate = true;
         }
+       // context.setInput(input.replaceAll(dateString,""));
         isExpressionFind = true;
     }
 }

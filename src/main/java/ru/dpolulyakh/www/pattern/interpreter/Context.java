@@ -1,4 +1,4 @@
-package ru.dpolulyakh.www.process.interpreter;
+package ru.dpolulyakh.www.pattern.interpreter;
 
 /**
  * @author Denis Polulyakh

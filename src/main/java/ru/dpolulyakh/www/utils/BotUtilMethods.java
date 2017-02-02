@@ -1,5 +1,6 @@
 package ru.dpolulyakh.www.utils;
 
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -16,8 +17,7 @@ import ru.dpolulyakh.www.entity.Currency;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
@@ -25,11 +25,12 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * @author  Denis Polulyakh
+ * @author Denis Polulyakh
  */
 public class BotUtilMethods {
     private static final String CLASS_NAME = BotUtilMethods.class.getName();
     private static final Logger log = Logger.getLogger(CLASS_NAME);
+    private static final String SYMBOLS="!@#$%^&*(){}[]\\//~`\"+-=<>,.?";
 
     /**
      * Method get xml from www.cbr.ru and put valute in Map
@@ -54,7 +55,7 @@ public class BotUtilMethods {
             Document document = documentBuilder.parse(in);
             // Получаем корневой элемент
             Node root = document.getDocumentElement();
-           // root.getAttributes().get
+            // root.getAttributes().get
             NodeList valutes = root.getChildNodes();
             for (int i = 0; i < valutes.getLength(); i++) {
                 Node valute = valutes.item(i);
@@ -105,6 +106,56 @@ public class BotUtilMethods {
         return currencyMap;
     }
 
+    public static Object deserializeObject(String strInput) {
+        final String METHOD_NAME = "deserializeObject";
+        log.info(strInput);
+        if (strInput == null) {
+            return null;
+        }
+        byte bytes[] = Base64.decode(strInput);
+        ObjectInputStream ois = null;
+        ByteArrayInputStream bais = null;
+        Object obj = null;
+        try {
+            bais = new ByteArrayInputStream(bytes);
+            ois = new ObjectInputStream(bais);
+            obj = ois.readObject();
+
+        } catch (IOException e) {
+            log.error(CLASS_NAME + " " + METHOD_NAME + " " + e.getMessage());
+        } catch (ClassNotFoundException e) {
+            log.error(CLASS_NAME + " " + METHOD_NAME + " " + e.getMessage());
+        } finally {
+            try {
+                if (ois != null) {
+                    ois.close();
+                }
+            } catch (IOException e) {
+                log.error(CLASS_NAME + " " + METHOD_NAME + " " + e.getMessage());
+            }
+        }
+
+        return obj;
+    }
+
+
+    public static String serializeObject(Object object)  {
+        final String METHOD_NAME = "serializeObject";
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = null;
+        try {
+            oos = new ObjectOutputStream(baos);
+            oos.writeObject(object);
+            oos.flush();
+        } catch (IOException e) {
+            log.debug(CLASS_NAME + " " + METHOD_NAME + e.getMessage());
+
+        }
+
+        return new String(Base64.encode(baos.toByteArray()));
+
+    }
+
     public static String getProperty(String aliasProperty) {
         final String METHOD_NAME = "getProperty";
         log.info(CLASS_NAME + " " + METHOD_NAME + " entry" + "Parameters: " + "aliasProperty=" + aliasProperty);
@@ -135,5 +186,17 @@ public class BotUtilMethods {
         return message;
     }
 
+    public static String replaseSymbols(String input){
+        final String METHOD_NAME = "replaseSymbols";
+        log.info("Input string "+input);
+        String output=input;
+        for(int i=0;i<SYMBOLS.length();i++){
+            if(input.contains(""+SYMBOLS.charAt(i))){
+                output=output.replaceAll(""+SYMBOLS.charAt(i),"");
+            }
+        }
+
+        return output;
+    }
 
 }
