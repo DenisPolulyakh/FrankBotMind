@@ -69,14 +69,12 @@ public class ProcessorFactory extends BotFactory {
 
         } else {
             log.info("Memory Process is find. Desearize MemoryProcess object");
-            Blob blob = ((MemoryProcessTable) memoryProcessorTable.get(0)).getMemoryProcessor();
-            try {
-                String memoryProcessorString = new String(blob.getBytes(1, (int) blob.length()));
-                log.info("String from base " + memoryProcessorString);
-                memoryProcessor = (MemoryProcessor) BotUtilMethods.deserializeObject(memoryProcessorString);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            byte[] memoryProcessorByte = ((MemoryProcessTable) memoryProcessorTable.get(0)).getMemoryProcessor();
+           
+            String memoryProcessorString = new String(memoryProcessorByte);
+            log.info("String from base " + memoryProcessorString);
+            memoryProcessor = (MemoryProcessor) BotUtilMethods.deserializeObject(memoryProcessorString);
+
 
             memoryProcessor.setInputMessage(inputJSONMessage);
             memoryProcessor.setMessageDataBaseDAO(messageDataBaseDAO);
