@@ -40,13 +40,26 @@ public class ApplicationContextConfig {
 
     @Bean(name = "dataSource")
     public DataSource getDataSource() {
-        BasicDataSource dataSource = new BasicDataSource();
+        /*BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
         dataSource.setUrl("jdbc:mysql://localhost:3306/bot");
         dataSource.setUsername("root");
         dataSource.setPassword("root");
 
-        return dataSource;
+        return dataSource;*/
+        
+        String dbUrl = System.getenv("JDBC_DATABASE_URL");
+        String username = System.getenv("JDBC_DATABASE_USERNAME");
+        String password = System.getenv("JDBC_DATABASE_PASSWORD");
+
+        BasicDataSource basicDataSource = new BasicDataSource();
+        basicDataSource.setUrl(dbUrl);
+        basicDataSource.setUsername(username);
+        basicDataSource.setPassword(password);
+
+        return basicDataSource;
+
+
     }
 
     @Bean(name = "message")
@@ -113,7 +126,8 @@ public class ApplicationContextConfig {
         sessionBuilder.setProperty("hibernate.hbm2ddl.auto", "update");
         sessionBuilder.setProperty("hibernate.show_sql", "true");
         sessionBuilder.setProperty("hibernate.format_sql", "true");
-        sessionBuilder.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
+        //sessionBuilder.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
+        sessionBuilder.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         sessionBuilder.setProperty("hibernate.enable_lazy_load_no_trans", "true");
         return sessionBuilder.buildSessionFactory();
     }
