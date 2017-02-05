@@ -1,5 +1,6 @@
 package ru.dpolulyakh.www.model;
 
+import org.hibernate.annotations.Type;
 import ru.dpolulyakh.www.process.MemoryProcessor;
 
 import javax.persistence.*;
@@ -18,6 +19,8 @@ public class MemoryProcessTable {
     private String idUser;
     @Column(name="USER_NAME")
     private String userName;
+    @Lob
+    @Type(type="org.hibernate.type.PrimitiveByteArrayBlobType")
     @Column(name="MEMORY_PROCESSOR")
     private Blob memoryProcessor;
 
