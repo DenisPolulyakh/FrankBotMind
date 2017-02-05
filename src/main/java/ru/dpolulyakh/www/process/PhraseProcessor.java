@@ -63,9 +63,9 @@ public class PhraseProcessor implements Processor {
                 String answer ="";
                 if(qAnwers>0){
                     if(qAnwers>1){
-                        answer = ""+answerList.get(rand.nextInt(qAnwers)).getAnswer();
+                        answer = new String(answerList.get(rand.nextInt(qAnwers)).getAnswer());
                     }else{
-                        answer=""+answerList.get(0).getAnswer();
+                        answer=new String(answerList.get(0).getAnswer());
                     }
                 }
                 if(answer.equals("")){

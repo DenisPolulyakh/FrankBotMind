@@ -209,9 +209,9 @@ public class MemoryProcessor implements Processor, Serializable {
             for (ValueAnswer va : answersSet) {
                 if (!value.contains(va.getAnswer())) {
                     if (i == answersSet.size() - 1) {
-                        messageToAnswer = messageToAnswer + va.getAnswer() + ". ";
+                        messageToAnswer = messageToAnswer + new String(va.getAnswer()) + ". ";
                     } else {
-                        messageToAnswer = messageToAnswer + va.getAnswer() + ", ";
+                        messageToAnswer = messageToAnswer + new String(va.getAnswer()) + ", ";
                     }
                 }
                 i++;
@@ -232,9 +232,9 @@ public class MemoryProcessor implements Processor, Serializable {
                     int k = 0;
                     for (ValueAnswer va : tempAnswer) {
                         if (k == tempAnswer.size() - 1) {
-                            messageToAnswer = messageToAnswer + va.getAnswer() + ".";
+                            messageToAnswer = messageToAnswer + new String(va.getAnswer()) + ".";
                         } else {
-                            messageToAnswer = messageToAnswer + va.getAnswer() + ", ";
+                            messageToAnswer = messageToAnswer + new String(va.getAnswer()) + ", ";
                         }
                         k++;
                     }
