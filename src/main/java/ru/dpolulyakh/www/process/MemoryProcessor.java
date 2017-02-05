@@ -108,6 +108,9 @@ public class MemoryProcessor implements Processor, Serializable {
 
         if ((text.toLowerCase().indexOf("выведи")) != -1) {
             String question = text.replaceAll("выведи", "");
+            if(question.trim().equals("")){
+                return "не понял ключевую фразу";
+            }
             KeyQuestion keyQuestion = findQuestionToDB(question.trim());
             List<ValueAnswer> tempAnswer = new ArrayList<ValueAnswer>();
             if (keyQuestion != null) {
@@ -131,9 +134,7 @@ public class MemoryProcessor implements Processor, Serializable {
                     }
                 }
             } else {
-                numberQuestions = 0;
-                selfSafe();
-                return "Такой ключевой фразы не найдено";
+               return "Такой ключевой фразы не найдено";
             }
         }
 
