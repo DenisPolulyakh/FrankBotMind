@@ -124,7 +124,7 @@ public class CurrencyProcessor implements Processor {
             }
             log.info("Number of matches " + k);
             if (k == question.split(" ").length) {
-                code = messageDataBaseDAO.listAnswersByKeyQuestion(keyQquest.getQuestion()).get(0).getAnswer();
+                code = ""+messageDataBaseDAO.listAnswersByKeyQuestion(keyQquest.getQuestion()).get(0).getAnswer();
                 log.info("CODE CURRENCY:" + code);
                 break;
             }
