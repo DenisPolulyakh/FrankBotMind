@@ -1,8 +1,5 @@
 package ru.dpolulyakh.www.pattern.factory;
 
-import ru.dpolulyakh.www.process.CourseProcessor;
-import ru.dpolulyakh.www.process.PhraseProcessor;
-
 import java.io.IOException;
 
 /**

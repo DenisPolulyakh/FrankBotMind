@@ -1,4 +1,4 @@
-package ru.dpolulyakh.www.dao.cource;
+package ru.dpolulyakh.www.dao.message;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;

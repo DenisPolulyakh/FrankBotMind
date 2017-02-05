@@ -10,8 +10,8 @@ import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBuilder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import ru.dpolulyakh.www.dao.cource.MessageDataBaseDAO;
-import ru.dpolulyakh.www.dao.cource.MessageDataBaseDAOImpl;
+import ru.dpolulyakh.www.dao.message.MessageDataBaseDAO;
+import ru.dpolulyakh.www.dao.message.MessageDataBaseDAOImpl;
 import ru.dpolulyakh.www.entity.Message;
 import ru.dpolulyakh.www.model.KeyQuestion;
 import ru.dpolulyakh.www.model.ValueAnswer;
@@ -74,8 +74,8 @@ public class ApplicationContextConfig {
 //        return new MemoryProcessor();
 //    }
 //    @Bean(name = "courseProcessor")
-//    public CourseProcessor getCourseProcessor() {
-//        return new CourseProcessor();
+//    public CurrencyProcessor getCourseProcessor() {
+//        return new CurrencyProcessor();
 //    }
 //    @Bean(name="phraseProcessor")
 //    public PhraseProcessor gePhraseProcessor(){ return new PhraseProcessor();}

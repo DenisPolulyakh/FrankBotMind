@@ -1,7 +1,7 @@
 package ru.dpolulyakh.www.process;
 
 import org.apache.log4j.Logger;
-import ru.dpolulyakh.www.dao.cource.MessageDataBaseDAO;
+import ru.dpolulyakh.www.dao.message.MessageDataBaseDAO;
 import ru.dpolulyakh.www.model.KeyQuestion;
 import ru.dpolulyakh.www.model.ValueAnswer;
 import ru.dpolulyakh.www.model.MemoryProcessTable;
@@ -27,35 +27,15 @@ public class MemoryProcessor implements Processor, Serializable {
     private static final Logger log = Logger.getLogger(CLASS_NAME);
     private int numberQuestions = 0;
     private transient String inputMessage;
-
-    public String getInputMessage() {
-        return inputMessage;
-    }
-
-    public void setInputMessage(String inputMessage) {
-        this.inputMessage = inputMessage;
-    }
-
-    public MemoryProcessor() {
-    }
-
-    public MemoryProcessor(String inputMessage) {
-        this.inputMessage = inputMessage;
-
-    }
-
-    public void setMessageDataBaseDAO(MessageDataBaseDAO messageDataBaseDAO) {
-        this.messageDataBaseDAO = messageDataBaseDAO;
-    }
-
     private transient MessageDataBaseDAO messageDataBaseDAO;
     private static List<String> botQuestions = new ArrayList<String>();
     private static List<String> botAnswers = new ArrayList<String>();
     private static List<String> userAnswers = new ArrayList<String>();
     private static List<String> userAnswersexit = new ArrayList<String>();
-    private List<String> key = new ArrayList<String>();
-    private List<String> value = new ArrayList<String>();
 
+    private Set<String> key = new HashSet<String>();
+    private Set<String> value = new HashSet<String>();
+    private String keyQuestionForOutputAnswer;
     static {
         botQuestions.add("Я могу сохранить для вас любую информацию. Вы хотите что-то сохранить?");
         botQuestions.add("Какую информацию вы хотите сохранить? Введенное вами сообщение будет сохранено");
@@ -76,10 +56,36 @@ public class MemoryProcessor implements Processor, Serializable {
     private String id;
     private String userName;
 
+    public MemoryProcessor() {
+    }
+
+    public MemoryProcessor(String inputMessage) {
+        this.inputMessage = inputMessage;
+
+    }
+
+    public MemoryProcessor(String inputMessage, MessageDataBaseDAO messageDataBaseDAO) {
+        this.inputMessage = inputMessage;
+        this.messageDataBaseDAO = messageDataBaseDAO;
+    }
+
+    public String getInputMessage() {
+        return inputMessage;
+    }
+
+    public void setInputMessage(String inputMessage) {
+        this.inputMessage = inputMessage;
+    }
+
+    public void setMessageDataBaseDAO(MessageDataBaseDAO messageDataBaseDAO) {
+        this.messageDataBaseDAO = messageDataBaseDAO;
+    }
+
     @Override
     public String getMessageToAnswer() {
         final String METHOD_NAME = "getMessageToAnswer";
         log.info(inputMessage);
+        log.info("QUESTION " + numberQuestions);
         String address = BotUtilMethods.getPropertyFromJSON(inputMessage, "address");
         String user = BotUtilMethods.getPropertyFromJSON(address, "user");
         id = BotUtilMethods.getPropertyFromJSON(user, "id");
@@ -99,14 +105,46 @@ public class MemoryProcessor implements Processor, Serializable {
 
         }
 
+        if ((text.toLowerCase().indexOf("выведи")) != -1) {
+            String question = text.replaceAll("выведи", "");
+            KeyQuestion keyQuestion = findQuestionToDB(question.trim());
+            List<ValueAnswer> tempAnswer = new ArrayList<ValueAnswer>();
+            if (keyQuestion != null) {
+                tempAnswer = messageDataBaseDAO.listAnswersByKeyQuestion(keyQuestion.getQuestion());
+                log.info("TempAnswer size " + tempAnswer.size());
+                if (tempAnswer.size() == 0) {
+                    numberQuestions = 0;
+                    selfSafe();
+                    return "Нет сообщений для данной ключевой фразы";
+
+                } else {
+                    if (tempAnswer.size() > 1) {
+                        numberQuestions = 4;
+                        keyQuestionForOutputAnswer = keyQuestion.getQuestion();
+                        selfSafe();
+                        return "У меня " + tempAnswer.size() + " сохраненных сообщений, соответствующих этому ключевому слову. Вывести их?";
+                    }else{
+                        numberQuestions = 0;
+                        selfSafe();
+                        return tempAnswer.get(0).getAnswer();
+                    }
+                }
+            }else {
+                numberQuestions = 0;
+                selfSafe();
+                return "Такой ключевой фразы не найдено";
+            }
+        }
+
         if (numberQuestions == 0) {
-            log.info("QUESTION " + numberQuestions);
+            messageToAnswer="";
             messageToAnswer = botQuestions.get(numberQuestions);
             numberQuestions++;
             selfSafe();
             return messageToAnswer;
         }
         if (numberQuestions == 1) {
+            messageToAnswer ="";
             text = text.toLowerCase();
             for (String answer : userAnswers) {
                 if (text.indexOf("не " + answer) != -1 || text.indexOf(answer + " не") != -1) {
@@ -124,8 +162,12 @@ public class MemoryProcessor implements Processor, Serializable {
                     return messageToAnswer;
                 }
             }
+            messageToAnswer = "Не хотите? Если все же хотите, наберите: да, yes, y, хочу. Для выхода из режима запоминания наберите: выход, exit, гудбай, чао";
+            selfSafe();
+            return messageToAnswer;
         }
         if (numberQuestions == 2) {
+            messageToAnswer="";
             value.add(text);
             messageToAnswer = botQuestions.get(numberQuestions);
             numberQuestions++;
@@ -147,7 +189,7 @@ public class MemoryProcessor implements Processor, Serializable {
                 }
 
                 answersSet.addAll(messageDataBaseDAO.listAnswersByKeyQuestion(k));
-
+                i++;
             }
             messageToAnswer = messageToAnswer + "Cообещения (в том числе сохраненные ранее, если они есть): ";
 
@@ -159,45 +201,52 @@ public class MemoryProcessor implements Processor, Serializable {
                 } else {
                     messageToAnswer = messageToAnswer + v + ", ";
                 }
+                i++;
             }
             i = 0;
             for (ValueAnswer va : answersSet) {
-                if (i == answersSet.size() - 1) {
-                    messageToAnswer = messageToAnswer + va.getAnswer() + ". ";
-                } else {
-                    messageToAnswer = messageToAnswer + va.getAnswer() + ", ";
+                if (!value.contains(va.getAnswer())) {
+                    if (i == answersSet.size() - 1) {
+                        messageToAnswer = messageToAnswer + va.getAnswer() + ". ";
+                    } else {
+                        messageToAnswer = messageToAnswer + va.getAnswer() + ", ";
+                    }
                 }
+                i++;
             }
-            messageToAnswer = messageToAnswer + "сохранить / выход ?";
-            numberQuestions++;
+            numberQuestions = 0;
+            storeToDataBase();
+            value.clear();
             selfSafe();
             return messageToAnswer;
         }
         if (numberQuestions == 4) {
-
-            if (text.indexOf("сохранить") != -1) {
-                storeToDataBase();
-                messageToAnswer = "Ваше сообщение сохранено!";
-                numberQuestions = 0;
-                selfSafe();
-                return messageToAnswer;
-
-            }
-
-            for (String exit : userAnswersexit) {
-                if (text.indexOf(exit) != -1) {
-                    //storeToDataBase();
-                    messageToAnswer = "пока :)";
+            log.info("QUESTION 4");
+            text = text.toLowerCase();
+            messageToAnswer="";
+            List<ValueAnswer> tempAnswer = messageDataBaseDAO.listAnswersByKeyQuestion(keyQuestionForOutputAnswer);
+            for (String answer : userAnswers) {
+                if (text.indexOf(answer) != -1) {
+                    int k = 0;
+                    for (ValueAnswer va : tempAnswer) {
+                        if (k == tempAnswer.size() - 1) {
+                            messageToAnswer = messageToAnswer + va.getAnswer() + ".";
+                        } else {
+                            messageToAnswer = messageToAnswer + va.getAnswer() + ", ";
+                        }
+                        k++;
+                    }
                     numberQuestions = 0;
-                    selfDelete();
+                    selfSafe();
                     return messageToAnswer;
                 }
+
             }
 
 
-            messageToAnswer = messageToAnswer + "Изменить/Удалить/Продолжить/Выход?";
-            numberQuestions++;
-            return messageToAnswer;
+            numberQuestions = 0;
+            selfSafe();
+            return "";
         }
 
 
@@ -233,27 +282,31 @@ public class MemoryProcessor implements Processor, Serializable {
     private void storeToDataBase() {
         Set<ValueAnswer> answersSet = null;
         KeyQuestion keyQuestion = null;
+        Set<ValueAnswer> valueToRemember = new HashSet<ValueAnswer>();
         log.info("STORTODATABASE");
+
+        // Create set value to remembering
+        for (String v : value) {
+            log.info("Value " + v);
+
+            ValueAnswer valueAnswer = new ValueAnswer();
+            valueAnswer.setAnswer(v);
+            valueToRemember.add(valueAnswer);
+
+        }
+
 
         for (String k : key) {
             log.info("Key " + k);
             keyQuestion = findQuestionToDB(k);
+            k=BotUtilMethods.replaseSymbols(k);
             if (keyQuestion == null) {
                 keyQuestion = new KeyQuestion();
                 answersSet = new HashSet<ValueAnswer>();
             } else {
                 answersSet = new HashSet<ValueAnswer>(messageDataBaseDAO.listAnswersByKeyQuestion(k));
             }
-            for (String v : value) {
-                log.info("Value " + v);
-
-                if (answersSet == null) {
-                    answersSet = new HashSet<ValueAnswer>();
-                }
-                ValueAnswer valueAnswer = new ValueAnswer();
-                valueAnswer.setAnswer(v);
-                answersSet.add(valueAnswer);
-            }
+            answersSet.addAll(valueToRemember);
             keyQuestion.setQuestion(k);
             keyQuestion.setValueAnswer(answersSet);
             messageDataBaseDAO.saveOrUpdate(keyQuestion);
@@ -262,9 +315,8 @@ public class MemoryProcessor implements Processor, Serializable {
     }
 
     private KeyQuestion findQuestionToDB(String key) {
-        log.info("FIND KEY  TO DATABASE");
+        log.info("Find key to DataBase");
         List<KeyQuestion> listKeyQuestion = messageDataBaseDAO.listKeyQuestion();
-        Set<ValueAnswer> setValueAnswers = null;
         for (KeyQuestion keyQquest : listKeyQuestion) {
             String question = keyQquest.getQuestion();
             //delete common symbols
@@ -272,14 +324,15 @@ public class MemoryProcessor implements Processor, Serializable {
             int k = 0;
             for (String w : question.split(" ")) {
                 log.info("Word: " + w);
-                if (key.toLowerCase().indexOf(w.toLowerCase()) != -1) {
+                if (key.toLowerCase().contains(w.toLowerCase())) {
                     k++;
                 }
             }
-
+            log.info("Number of matches "+k);
             if (k == question.split(" ").length) {
                 return keyQquest;
             }
+            log.info("NULL");
         }
         return null;
     }

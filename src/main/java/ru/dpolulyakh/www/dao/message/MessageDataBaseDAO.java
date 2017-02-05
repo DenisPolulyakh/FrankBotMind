@@ -1,4 +1,4 @@
-package ru.dpolulyakh.www.dao.cource;
+package ru.dpolulyakh.www.dao.message;
 
 import ru.dpolulyakh.www.model.KeyQuestion;
 import ru.dpolulyakh.www.model.ValueAnswer;

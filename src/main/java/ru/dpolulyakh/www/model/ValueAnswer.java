@@ -2,6 +2,7 @@ package ru.dpolulyakh.www.model;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -54,5 +55,18 @@ public class ValueAnswer {
 
     public void setKeyQuestions(Set<KeyQuestion> keyQuestion) {
         this.keyQuestion = keyQuestion;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ValueAnswer that = (ValueAnswer) o;
+        return Objects.equals(answer, that.answer);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(answer);
     }
 }

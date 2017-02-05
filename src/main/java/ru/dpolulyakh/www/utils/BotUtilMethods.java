@@ -30,7 +30,7 @@ import java.util.Properties;
 public class BotUtilMethods {
     private static final String CLASS_NAME = BotUtilMethods.class.getName();
     private static final Logger log = Logger.getLogger(CLASS_NAME);
-    private static final String SYMBOLS="!@#$%^&*(){}[]\\//~`\"+-=<>,.?";
+    private static final String SYMBOLS="!@#$%^&*(){}[]/~`+-=<>,";
 
     /**
      * Method get xml from www.cbr.ru and put valute in Map
@@ -195,7 +195,9 @@ public class BotUtilMethods {
                 output=output.replaceAll(""+SYMBOLS.charAt(i),"");
             }
         }
-
+        output=output.replaceAll("\\?","");
+        output=output.replaceAll("\\\\","");
+        log.info("Output string "+output);
         return output;
     }
 
