@@ -152,6 +152,10 @@ public class MemoryProcessor implements Processor, Serializable {
                     messageToAnswer = "Не хотите? Если все же хотите, наберите: да, yes, y, хочу. Для выхода из режима запоминания наберите: выход, exit, гудбай, чао";
                     selfSafe();
                     return messageToAnswer;
+                }else{
+                    messageToAnswer = "Для выхода из режима запоминания наберите: выход, exit, гудбай, чао";
+                    selfSafe();
+                    return messageToAnswer;
                 }
 
             }
