@@ -21,7 +21,7 @@ public class MemoryProcessTable {
     private String userName;
     @Type(type="org.hibernate.type.PrimitiveByteArrayBlobType")
     @Column(name="MEMORY_PROCESSOR")
-    private Blob memoryProcessor;
+    private byte[] memoryProcessor;
 
     public MemoryProcessTable() {
     }
@@ -42,11 +42,11 @@ public class MemoryProcessTable {
         this.userName = userName;
     }
 
-    public Blob getMemoryProcessor() {
+    public byte[] getMemoryProcessor() {
         return memoryProcessor;
     }
 
-    public void setMemoryProcessor(Blob memoryProcessor) {
+    public void setMemoryProcessor(byte[] memoryProcessor) {
         this.memoryProcessor = memoryProcessor;
     }
 }

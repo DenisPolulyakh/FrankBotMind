@@ -36,6 +36,7 @@ public class MemoryProcessor implements Processor, Serializable {
     private Set<String> key = new HashSet<String>();
     private Set<String> value = new HashSet<String>();
     private String keyQuestionForOutputAnswer;
+
     static {
         botQuestions.add("Я могу сохранить для вас любую информацию. Вы хотите что-то сохранить?");
         botQuestions.add("Какую информацию вы хотите сохранить? Введенное вами сообщение будет сохранено");
@@ -123,13 +124,13 @@ public class MemoryProcessor implements Processor, Serializable {
                         keyQuestionForOutputAnswer = keyQuestion.getQuestion();
                         selfSafe();
                         return "У меня " + tempAnswer.size() + " сохраненных сообщений, соответствующих этому ключевому слову. Вывести их?";
-                    }else{
+                    } else {
                         numberQuestions = 0;
                         selfSafe();
                         return tempAnswer.get(0).getAnswer();
                     }
                 }
-            }else {
+            } else {
                 numberQuestions = 0;
                 selfSafe();
                 return "Такой ключевой фразы не найдено";
@@ -137,14 +138,14 @@ public class MemoryProcessor implements Processor, Serializable {
         }
 
         if (numberQuestions == 0) {
-            messageToAnswer="";
+            messageToAnswer = "";
             messageToAnswer = botQuestions.get(numberQuestions);
             numberQuestions++;
             selfSafe();
             return messageToAnswer;
         }
         if (numberQuestions == 1) {
-            messageToAnswer ="";
+            messageToAnswer = "";
             text = text.toLowerCase();
             for (String answer : userAnswers) {
                 if (text.indexOf("не " + answer) != -1 || text.indexOf(answer + " не") != -1) {
@@ -167,7 +168,7 @@ public class MemoryProcessor implements Processor, Serializable {
             return messageToAnswer;
         }
         if (numberQuestions == 2) {
-            messageToAnswer="";
+            messageToAnswer = "";
             value.add(text);
             messageToAnswer = botQuestions.get(numberQuestions);
             numberQuestions++;
@@ -223,7 +224,7 @@ public class MemoryProcessor implements Processor, Serializable {
         if (numberQuestions == 4) {
             log.info("QUESTION 4");
             text = text.toLowerCase();
-            messageToAnswer="";
+            messageToAnswer = "";
             List<ValueAnswer> tempAnswer = messageDataBaseDAO.listAnswersByKeyQuestion(keyQuestionForOutputAnswer);
             for (String answer : userAnswers) {
                 if (text.indexOf(answer) != -1) {
@@ -270,11 +271,9 @@ public class MemoryProcessor implements Processor, Serializable {
         MemoryProcessTable memoryProcessTable = new MemoryProcessTable();
         memoryProcessTable.setIdUser(id);
         memoryProcessTable.setUserName(userName);
-        try {
-            memoryProcessTable.setMemoryProcessor(new SerialBlob(BotUtilMethods.serializeObject(this).getBytes()));
-        } catch (SQLException e) {
-            log.error(e.getMessage());
-        }
+
+        memoryProcessTable.setMemoryProcessor(BotUtilMethods.serializeObject(this).getBytes());
+
         log.info(memoryProcessTable.toString());
         messageDataBaseDAO.saveOrUpdate(memoryProcessTable);
     }
@@ -299,7 +298,7 @@ public class MemoryProcessor implements Processor, Serializable {
         for (String k : key) {
             log.info("Key " + k);
             keyQuestion = findQuestionToDB(k);
-            k=BotUtilMethods.replaseSymbols(k);
+            k = BotUtilMethods.replaseSymbols(k);
             if (keyQuestion == null) {
                 keyQuestion = new KeyQuestion();
                 answersSet = new HashSet<ValueAnswer>();
@@ -328,7 +327,7 @@ public class MemoryProcessor implements Processor, Serializable {
                     k++;
                 }
             }
-            log.info("Number of matches "+k);
+            log.info("Number of matches " + k);
             if (k == question.split(" ").length) {
                 return keyQquest;
             }
