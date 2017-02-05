@@ -97,7 +97,7 @@ public class MemoryProcessor implements Processor, Serializable {
         log.info(CLASS_NAME + " " + METHOD_NAME + " entry id=" + id);
 
         for (String exit : userAnswersexit) {
-            if (text.indexOf(exit) != -1 && numberQuestions != 4) {
+            if (text.indexOf(exit) != -1 && numberQuestions != 1) {
                 messageToAnswer = "пока :)";
                 numberQuestions = 0;
                 selfDelete();
@@ -130,7 +130,7 @@ public class MemoryProcessor implements Processor, Serializable {
                     } else {
                         numberQuestions = 0;
                         selfSafe();
-                        return tempAnswer.get(0).getAnswer();
+                        return new String(tempAnswer.get(0).getAnswer());
                     }
                 }
             } else {
@@ -294,7 +294,7 @@ public class MemoryProcessor implements Processor, Serializable {
             log.info("Value " + v);
 
             ValueAnswer valueAnswer = new ValueAnswer();
-            valueAnswer.setAnswer(v);
+            valueAnswer.setAnswer(v.getBytes());
             valueToRemember.add(valueAnswer);
 
         }

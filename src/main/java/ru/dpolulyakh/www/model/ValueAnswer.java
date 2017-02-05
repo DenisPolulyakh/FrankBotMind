@@ -1,5 +1,7 @@
 package ru.dpolulyakh.www.model;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;
@@ -16,19 +18,20 @@ public class ValueAnswer {
     @GeneratedValue
     @Column(name = "ID_ANSWER")
     private int id;
+    @Type(type="org.hibernate.type.PrimitiveByteArrayBlobType")
     @Column(name="ANSWER")
-    private String answer;
+    private byte[] answer;
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "valueAnswer")
     private Set<KeyQuestion> keyQuestion = new HashSet<KeyQuestion>();
 
     public ValueAnswer() {
     }
 
-    public ValueAnswer(String answer) {
+    public ValueAnswer(byte[] answer) {
         this.answer = answer;
     }
 
-    public ValueAnswer(String answer, Set<KeyQuestion> keyQuestion) {
+    public ValueAnswer(byte[] answer, Set<KeyQuestion> keyQuestion) {
         this.answer = answer;
         this.keyQuestion = keyQuestion;
     }
@@ -41,11 +44,11 @@ public class ValueAnswer {
         this.id = id;
     }
 
-    public String getAnswer() {
+    public byte[] getAnswer() {
         return answer;
     }
 
-    public void setAnswer(String answer) {
+    public void setAnswer(byte[] answer) {
         this.answer = answer;
     }
 
