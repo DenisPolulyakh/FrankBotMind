@@ -97,7 +97,7 @@ public class MemoryProcessor implements Processor, Serializable {
         log.info(CLASS_NAME + " " + METHOD_NAME + " entry id=" + id);
 
         for (String exit : userAnswersexit) {
-            if (text.indexOf(exit) != -1 && numberQuestions != 2) {
+            if (text.indexOf(exit) != -1 && numberQuestions != 2 ) {
                 messageToAnswer = "пока :)";
                 numberQuestions = 0;
                 selfDelete();
@@ -106,7 +106,7 @@ public class MemoryProcessor implements Processor, Serializable {
 
         }
 
-        if ((text.toLowerCase().indexOf("выведи")) != -1) {
+        if ((text.toLowerCase().indexOf("выведи")) != -1 && numberQuestions != 2 ) {
             String question = text.replaceAll("выведи", "");
             if(question.trim().equals("")){
                 return "не понял ключевую фразу";
