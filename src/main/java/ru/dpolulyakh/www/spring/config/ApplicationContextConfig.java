@@ -127,7 +127,7 @@ public class ApplicationContextConfig {
         sessionBuilder.setProperty("hibernate.show_sql", "true");
         sessionBuilder.setProperty("hibernate.format_sql", "true");
         //sessionBuilder.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
-        sessionBuilder.setProperty("hibernate.jdbc.use_streams_for_binary","true");
+       // sessionBuilder.setProperty("hibernate.jdbc.use_streams_for_binary","true");
         sessionBuilder.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         sessionBuilder.setProperty("hibernate.enable_lazy_load_no_trans", "true");
         return sessionBuilder.buildSessionFactory();
