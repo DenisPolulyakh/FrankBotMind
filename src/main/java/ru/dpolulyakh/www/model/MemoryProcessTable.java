@@ -19,7 +19,6 @@ public class MemoryProcessTable {
     private String idUser;
     @Column(name="USER_NAME")
     private String userName;
-    @Lob
     @Type(type="org.hibernate.type.PrimitiveByteArrayBlobType")
     @Column(name="MEMORY_PROCESSOR")
     private Blob memoryProcessor;
