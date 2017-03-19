@@ -37,7 +37,9 @@ public class BotController {
     @RequestMapping(value = "/botmind", method = RequestMethod.GET)
     public Message getAnswer(@RequestParam(value = "message", required = false, defaultValue = "") String messageJSON) throws UnsupportedEncodingException, SQLException {
         final String METHOD_NAME = "getAnswer";
+        log.info("Message from request: " + messageJSON);
         messageJSON = URLDecoder.decode(messageJSON, "UTF-8");
+        log.info("After decode: " + messageJSON);
         Processor processor = botProcessor.getProcessor(messageJSON);
         Message message = new Message();
         message.addPhrase(processor.getMessageToAnswer());
