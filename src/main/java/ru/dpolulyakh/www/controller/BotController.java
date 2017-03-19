@@ -11,6 +11,7 @@ import ru.dpolulyakh.www.process.BotProcess;
 import ru.dpolulyakh.www.pattern.factory.Processor;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.sql.SQLException;
 
 ;
@@ -36,6 +37,7 @@ public class BotController {
     @RequestMapping(value = "/botmind", method = RequestMethod.GET)
     public Message getAnswer(@RequestParam(value = "message", required = false, defaultValue = "") String messageJSON) throws UnsupportedEncodingException, SQLException {
         final String METHOD_NAME = "getAnswer";
+        messageJSON = URLDecoder.decode(messageJSON, "UTF-8");
         Processor processor = botProcessor.getProcessor(messageJSON);
         Message message = new Message();
         message.addPhrase(processor.getMessageToAnswer());
