@@ -6,6 +6,7 @@ import ru.dpolulyakh.www.model.KeyQuestion;
 import ru.dpolulyakh.www.model.ValueAnswer;
 import ru.dpolulyakh.www.model.MemoryProcessTable;
 import ru.dpolulyakh.www.pattern.factory.Processor;
+import ru.dpolulyakh.www.service.StorageService;
 import ru.dpolulyakh.www.utils.BotUtilMethods;
 
 import javax.sql.rowset.serial.SerialBlob;
@@ -27,7 +28,7 @@ public class MemoryProcessor implements Processor, Serializable {
     private static final Logger log = Logger.getLogger(CLASS_NAME);
     private int numberQuestions = 0;
     private transient String inputMessage;
-    private transient MessageDataBaseDAO messageDataBaseDAO;
+    private transient StorageService storageService;
     private static List<String> botQuestions = new ArrayList<String>();
     private static List<String> botAnswers = new ArrayList<String>();
     private static List<String> userAnswers = new ArrayList<String>();
@@ -65,9 +66,9 @@ public class MemoryProcessor implements Processor, Serializable {
 
     }
 
-    public MemoryProcessor(String inputMessage, MessageDataBaseDAO messageDataBaseDAO) {
+    public MemoryProcessor(String inputMessage, StorageService storageService) {
         this.inputMessage = inputMessage;
-        this.messageDataBaseDAO = messageDataBaseDAO;
+        this.storageService = storageService;
     }
 
     public String getInputMessage() {
@@ -78,8 +79,8 @@ public class MemoryProcessor implements Processor, Serializable {
         this.inputMessage = inputMessage;
     }
 
-    public void setMessageDataBaseDAO(MessageDataBaseDAO messageDataBaseDAO) {
-        this.messageDataBaseDAO = messageDataBaseDAO;
+    public void setStorageService(StorageService storageService) {
+        this.storageService = storageService;
     }
 
     @Override
@@ -106,7 +107,7 @@ public class MemoryProcessor implements Processor, Serializable {
 
         }
 
-        if ((text.toLowerCase().indexOf("выведи")) != -1 && numberQuestions != 2 ) {
+      /*  if ((text.toLowerCase().indexOf("выведи")) != -1 && numberQuestions != 3 ) {
             String question = text.replaceAll("выведи", "");
             if(question.trim().equals("")){
                 return "не понял ключевую фразу";
@@ -136,7 +137,7 @@ public class MemoryProcessor implements Processor, Serializable {
             } else {
                return "Такой ключевой фразы не найдено";
             }
-        }
+        }*/
 
         if (numberQuestions == 0) {
             messageToAnswer = "";
@@ -190,7 +191,7 @@ public class MemoryProcessor implements Processor, Serializable {
                     messageToAnswer = messageToAnswer + k + ", ";
                 }
 
-                answersSet.addAll(messageDataBaseDAO.listAnswersByKeyQuestion(k));
+                answersSet.addAll(storageService.getAnswersByQuestion(k));
                 i++;
             }
             messageToAnswer = messageToAnswer + "Cообещения (в том числе сохраненные ранее, если они есть): ";
@@ -226,7 +227,7 @@ public class MemoryProcessor implements Processor, Serializable {
             log.info("QUESTION 4");
             text = text.toLowerCase();
             messageToAnswer = "";
-            List<ValueAnswer> tempAnswer = messageDataBaseDAO.listAnswersByKeyQuestion(keyQuestionForOutputAnswer);
+            List<ValueAnswer> tempAnswer = storageService.getAnswersByQuestion(keyQuestionForOutputAnswer);
             for (String answer : userAnswers) {
                 if (text.indexOf(answer) != -1) {
                     int k = 0;
@@ -263,7 +264,7 @@ public class MemoryProcessor implements Processor, Serializable {
         memoryProcessTable.setUserName(userName);
 
 
-        messageDataBaseDAO.deleteMemoryProcessor(memoryProcessTable);
+        storageService.deleteMemoryProcessor(memoryProcessTable);
     }
 
     private void selfSafe() {
@@ -276,16 +277,13 @@ public class MemoryProcessor implements Processor, Serializable {
         memoryProcessTable.setMemoryProcessor(BotUtilMethods.serializeObject(this).getBytes());
 
         log.info(memoryProcessTable.toString());
-        messageDataBaseDAO.saveOrUpdate(memoryProcessTable);
+        storageService.saveOrUpdate(memoryProcessTable);
     }
 
     private void storeToDataBase() {
-        Set<ValueAnswer> answersSet = null;
-        KeyQuestion keyQuestion = null;
+        log.info("storeToDataBase");
         Set<ValueAnswer> valueToRemember = new HashSet<ValueAnswer>();
-        log.info("STORTODATABASE");
 
-        // Create set value to remembering
         for (String v : value) {
             log.info("Value " + v);
 
@@ -294,27 +292,14 @@ public class MemoryProcessor implements Processor, Serializable {
             valueToRemember.add(valueAnswer);
 
         }
-
-
-        for (String k : key) {
-            log.info("Key " + k);
-            keyQuestion = findQuestionToDB(k);
-            k = BotUtilMethods.replaseSymbols(k);
-            if (keyQuestion == null) {
-                keyQuestion = new KeyQuestion();
-                answersSet = new HashSet<ValueAnswer>();
-            } else {
-                answersSet = new HashSet<ValueAnswer>(messageDataBaseDAO.listAnswersByKeyQuestion(k));
-            }
-            answersSet.addAll(valueToRemember);
-            keyQuestion.setQuestion(k);
-            keyQuestion.setValueAnswer(answersSet);
-            messageDataBaseDAO.saveOrUpdate(keyQuestion);
-
+        for(String k: key) {
+            KeyQuestion keyQuestion = new KeyQuestion(k);
+            keyQuestion.setValueAnswer(valueToRemember);
+            storageService.addToStorage(keyQuestion);
         }
     }
 
-    private KeyQuestion findQuestionToDB(String key) {
+   /* private KeyQuestion findQuestionToDB(String key) {
         log.info("Find key to DataBase");
         List<KeyQuestion> listKeyQuestion = messageDataBaseDAO.listKeyQuestion();
         for (KeyQuestion keyQquest : listKeyQuestion) {
@@ -335,7 +320,7 @@ public class MemoryProcessor implements Processor, Serializable {
             log.info("NULL");
         }
         return null;
-    }
+    }*/
 
 
 }

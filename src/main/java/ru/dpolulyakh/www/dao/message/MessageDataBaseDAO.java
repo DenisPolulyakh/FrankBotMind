@@ -11,6 +11,8 @@ public interface MessageDataBaseDAO {
 
     List<ValueAnswer> listAnswersByKeyQuestion(String keyQuestion);
 
+    List<KeyQuestion> keyQuestionByKey(String key);
+
     List<KeyQuestion> listKeyQuestion();
 
     List<ValueAnswer> listValueAnswer();

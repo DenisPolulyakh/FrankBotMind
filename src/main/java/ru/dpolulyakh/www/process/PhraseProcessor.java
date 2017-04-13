@@ -3,8 +3,10 @@ package ru.dpolulyakh.www.process;
 import org.apache.log4j.Logger;
 import ru.dpolulyakh.www.dao.message.MessageDataBaseDAO;
 import ru.dpolulyakh.www.model.KeyQuestion;
+import ru.dpolulyakh.www.model.MemoryProcessTable;
 import ru.dpolulyakh.www.model.ValueAnswer;
 import ru.dpolulyakh.www.pattern.factory.Processor;
+import ru.dpolulyakh.www.service.StorageService;
 import ru.dpolulyakh.www.utils.BotUtilMethods;
 
 import java.util.ArrayList;
@@ -22,7 +24,7 @@ public class PhraseProcessor implements Processor {
     private static final String DEFAULT_LOST_DATA="Хотел что-то сказать, но вылетело из головы :)";
     private static final String DEFAULT_ANSWER="Извините, я Вас не понял :)";
     private String message;
-    private MessageDataBaseDAO messageDataBaseDAO;
+    private StorageService storageService;
     private Random rand = new Random();
 
      public PhraseProcessor() {
@@ -32,9 +34,10 @@ public class PhraseProcessor implements Processor {
         message = inputJSONMessage;
     }
 
-    public PhraseProcessor(String message, MessageDataBaseDAO messageDataBaseDAO) {
+
+    public PhraseProcessor(String message, StorageService storageService) {
         this.message = message;
-        this.messageDataBaseDAO = messageDataBaseDAO;
+        this.storageService = storageService;
     }
 
     @Override
@@ -42,8 +45,17 @@ public class PhraseProcessor implements Processor {
         final String METHOD_NAME = "getMessageToAnswer";
         String text = BotUtilMethods.getPropertyFromJSON(message,"text");
         log.info(CLASS_NAME + " " + METHOD_NAME + " question: " + text);
-        log.info("Find in table");
-        List<KeyQuestion> listKeyQuestion = messageDataBaseDAO.listKeyQuestion();
+        String [] question  =  text.split(" ");
+
+        for(String q:question){
+            if(q.length()>2){
+
+            }
+        }
+        return DEFAULT_ANSWER;
+
+       // log.info("Find in table");
+        /*List<KeyQuestion> listKeyQuestion = messageDataBaseDAO.listKeyQuestion();
         for (KeyQuestion keyQquest : listKeyQuestion) {
             String question = keyQquest.getQuestion();
             //delete common symbols
@@ -72,13 +84,13 @@ public class PhraseProcessor implements Processor {
                     answer = DEFAULT_LOST_DATA;
                 }
 
-                log.info("PHRASE:"+ answer);
-                return answer;
-            }
+                log.info("PHRASE:"+ answer);*/
+              //  return "";
+           // }
 
-        }
+     //   }
 
-        return DEFAULT_ANSWER;
+
     }
 
 
@@ -92,10 +104,56 @@ public class PhraseProcessor implements Processor {
     }
 
     public MessageDataBaseDAO getMessageDataBaseDAO() {
+        MessageDataBaseDAO messageDataBaseDAO = new MessageDataBaseDAO() {
+            @Override
+            public List<ValueAnswer> listAnswersByKeyQuestion(String keyQuestion) {
+                return null;
+            }
+
+            @Override
+            public List<KeyQuestion> keyQuestionByKey(String key) {
+                return null;
+            }
+
+            @Override
+            public List<KeyQuestion> listKeyQuestion() {
+                return null;
+            }
+
+            @Override
+            public List<ValueAnswer> listValueAnswer() {
+                return null;
+            }
+
+            @Override
+            public void saveOrUpdate(KeyQuestion keyQuestion) {
+
+            }
+
+            @Override
+            public void saveOrUpdate(ValueAnswer valueAnswer) {
+
+            }
+
+            @Override
+            public void saveOrUpdate(MemoryProcessTable memoryProcessTable) {
+
+            }
+
+            @Override
+            public List<MemoryProcessTable> getMemoryProcessTable(String id) {
+                return null;
+            }
+
+            @Override
+            public void deleteMemoryProcessor(MemoryProcessTable memoryProcessTable) {
+
+            }
+        };
         return messageDataBaseDAO;
     }
 
-    public void setMessageDataBaseDAO(MessageDataBaseDAO messageDataBaseDAO) {
-        this.messageDataBaseDAO = messageDataBaseDAO;
+    public void setStorageService(StorageService storageService) {
+        this.storageService = storageService;
     }
 }

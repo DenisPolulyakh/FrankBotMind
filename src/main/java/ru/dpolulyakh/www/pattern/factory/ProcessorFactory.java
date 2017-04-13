@@ -8,6 +8,7 @@ import ru.dpolulyakh.www.model.MemoryProcessTable;
 import ru.dpolulyakh.www.process.CurrencyProcessor;
 import ru.dpolulyakh.www.process.MemoryProcessor;
 import ru.dpolulyakh.www.process.PhraseProcessor;
+import ru.dpolulyakh.www.service.StorageService;
 import ru.dpolulyakh.www.spring.config.ApplicationContextConfig;
 import ru.dpolulyakh.www.utils.BotUtilMethods;
 
@@ -26,8 +27,7 @@ public class ProcessorFactory extends BotFactory {
     private static final Logger log = Logger.getLogger(CLASS_NAME);
     @Autowired
     ApplicationContextConfig applicationContextConfig;
-    @Autowired
-    MessageDataBaseDAO messageDataBaseDAO;
+    StorageService storageService;
     private static List<String> commandMemoryList = new ArrayList<String>();
 
     static {
@@ -46,14 +46,14 @@ public class ProcessorFactory extends BotFactory {
         log.info(inputJSONMessage);
         String text = BotUtilMethods.getPropertyFromJSON(inputJSONMessage, "text");
         //CurrencyProcessor
-        if (text.toLowerCase().indexOf("курс") != -1) {
+       /* if (text.toLowerCase().indexOf("курс") != -1) {
             log.info("CURRENCYPROCESSOR");
             return new CurrencyProcessor(inputJSONMessage, messageDataBaseDAO);
-        }
+        }*/
         //  Memory processor
         String id = BotUtilMethods.getPropertyFromJSON(BotUtilMethods.getPropertyFromJSON(BotUtilMethods.getPropertyFromJSON(inputJSONMessage, "address"), "user"), "id");
         log.info(id);
-        List<MemoryProcessTable> memoryProcessorTable = messageDataBaseDAO.getMemoryProcessTable(id);
+        List<MemoryProcessTable> memoryProcessorTable = storageService.getMemoryProcessTable(id);
         log.info("Memory Process Table size " + memoryProcessorTable.size());
         MemoryProcessor memoryProcessor = null;
         if (memoryProcessorTable != null && memoryProcessorTable.size() == 0) {
@@ -61,7 +61,7 @@ public class ProcessorFactory extends BotFactory {
             for (String command : commandMemoryList) {
                 if (text.toLowerCase().indexOf(command.toLowerCase()) != -1) {
 
-                    return new MemoryProcessor(inputJSONMessage, messageDataBaseDAO);
+                    return new MemoryProcessor(inputJSONMessage, new StorageService());
 
                 }
 
@@ -77,11 +77,12 @@ public class ProcessorFactory extends BotFactory {
 
 
             memoryProcessor.setInputMessage(inputJSONMessage);
-            memoryProcessor.setMessageDataBaseDAO(messageDataBaseDAO);
+            memoryProcessor.setStorageService(new StorageService());
             return memoryProcessor;
 
         }
         //Phrase processor
-        return new PhraseProcessor(inputJSONMessage, messageDataBaseDAO);
+       // return new PhraseProcessor(inputJSONMessage, new StorageService());
+        return memoryProcessor;
     }
 }

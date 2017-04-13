@@ -3,6 +3,7 @@ package ru.dpolulyakh.www.model;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -71,5 +72,13 @@ public class ValueAnswer {
     @Override
     public int hashCode() {
         return Objects.hash(answer);
+    }
+
+    @Override
+    public String toString() {
+        return "ValueAnswer{" +
+                "id=" + id +
+                ", answer=" + new String(answer) + '\'' +
+                '}';
     }
 }

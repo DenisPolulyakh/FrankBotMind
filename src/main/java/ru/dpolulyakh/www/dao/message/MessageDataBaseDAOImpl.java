@@ -99,6 +99,15 @@ public class MessageDataBaseDAOImpl implements MessageDataBaseDAO {
 
     @Override
     @Transactional
+    public List<KeyQuestion> keyQuestionByKey(String key) {
+        String hql = "from KeyQuestion kq where kq.question =  :key";
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setString("key", key);
+        return  query.list();
+    }
+
+    @Override
+    @Transactional
     public List<KeyQuestion> listKeyQuestion() {
         List<KeyQuestion> keyQuestionList = (List<KeyQuestion> ) sessionFactory.getCurrentSession()
                 .createCriteria(KeyQuestion.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();

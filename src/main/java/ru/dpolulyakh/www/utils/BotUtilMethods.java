@@ -192,11 +192,12 @@ public class BotUtilMethods {
         String output=input;
         for(int i=0;i<SYMBOLS.length();i++){
             if(input.contains(""+SYMBOLS.charAt(i))){
-                output=output.replaceAll(""+SYMBOLS.charAt(i),"");
+                output=output.replaceAll(""+SYMBOLS.charAt(i)," ");
             }
         }
-        output=output.replaceAll("\\?","");
-        output=output.replaceAll("\\\\","");
+        output=output.replaceAll("\\?"," ");
+        output=output.replaceAll("\\\\"," ");
+        output=output.replaceAll("  "," ");
         log.info("Output string "+output);
         return output;
     }

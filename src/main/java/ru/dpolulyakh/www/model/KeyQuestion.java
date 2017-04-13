@@ -1,10 +1,7 @@
 package ru.dpolulyakh.www.model;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Denis Polulyakh
@@ -66,5 +63,26 @@ public class KeyQuestion {
 
     public void setValueAnswer(Set<ValueAnswer> valueAnswer) {
         this.valueAnswer = valueAnswer;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        KeyQuestion that = (KeyQuestion) o;
+        return Objects.equals(question, that.question);
+    }
+
+    @Override
+    public int hashCode() {
+        return question.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "KeyQuestion{" +
+                "id=" + id +
+                ", question='" + question + '\'' +
+                '}';
     }
 }

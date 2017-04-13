@@ -33,7 +33,10 @@ public class BotController {
     @Autowired
     MessageDataBaseDAO messageDataBaseDAO;
 
-    @RequestMapping(value = "/botmind", method = RequestMethod.GET)
+
+
+    @CrossOrigin(origins = "*",allowedHeaders = {"Origin","X-Requested-With","Content-Type","Accept"})
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
     public Message getAnswer(@RequestParam(value = "message", required = false, defaultValue = "") String messageJSON) throws UnsupportedEncodingException, SQLException {
         final String METHOD_NAME = "getAnswer";
         Processor processor = botProcessor.getProcessor(messageJSON);
@@ -42,5 +45,8 @@ public class BotController {
         log.info("EXIT " + CLASS_NAME);
         return message;
     }
+
+
+
 
 }
