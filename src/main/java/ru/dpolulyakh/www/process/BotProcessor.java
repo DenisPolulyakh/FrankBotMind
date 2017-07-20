@@ -29,7 +29,7 @@ public class BotProcessor {
     private String message;
     private ApplicationContext context;
     private final String DATE_FORMAT = "dd.MM.yyyy";
-    private final String DEFAULT_ANSWER = "Простите, я вас не понял :)";
+    private final String DEFAULT_ANSWER = "Не знаю )";
     private final String CURRENCY_DEFAULT_ANSWER = "О такой валюте я ничего не знаю";
     private final String DATE_DEFAULT_ANSWER = "Неверный формат даты, введите дату в фоормате " + DATE_FORMAT;
 
